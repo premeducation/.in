@@ -13,12 +13,14 @@ box-sizing:border-box;
 font-family:Arial,sans-serif;
 }
 
+/* BACKGROUND */
 body{
 background:url("back.jpg") no-repeat center center/cover;
 background-attachment:fixed;
 color:#333;
 }
 
+/* HEADER */
 header{
 background:rgba(76,175,80,0.9);
 color:white;
@@ -30,6 +32,7 @@ header h1{
 font-size:40px;
 }
 
+/* NAVIGATION */
 nav{
 background:rgba(51,51,51,0.9);
 }
@@ -57,6 +60,7 @@ background:#4CAF50;
 border-radius:5px;
 }
 
+/* HERO SECTION */
 .hero{
 display:flex;
 flex-direction:column;
@@ -88,6 +92,11 @@ border-radius:8px;
 text-decoration:none;
 }
 
+.hero .donate-btn:hover{
+background:#e64a19;
+}
+
+/* SECTIONS */
 section{
 padding:60px 20px;
 max-width:1000px;
@@ -103,6 +112,7 @@ margin-bottom:20px;
 text-align:center;
 }
 
+/* ABOUT */
 .about-container{
 display:flex;
 gap:25px;
@@ -117,6 +127,11 @@ border:4px solid black;
 object-fit:cover;
 }
 
+.about-text{
+flex:1;
+}
+
+/* COURSES */
 .cards{
 display:flex;
 flex-wrap:wrap;
@@ -139,6 +154,7 @@ margin-bottom:10px;
 color:#4CAF50;
 }
 
+/* YOUTUBE */
 #youtube iframe{
 width:420px;
 height:230px;
@@ -148,6 +164,7 @@ display:block;
 margin:auto;
 }
 
+/* CONTACT */
 form{
 display:flex;
 flex-direction:column;
@@ -177,6 +194,7 @@ form button:hover{
 background:#45a049;
 }
 
+/* FOOTER */
 footer{
 background:rgba(51,51,51,0.9);
 color:white;
@@ -185,6 +203,7 @@ padding:20px;
 margin-top:40px;
 }
 
+/* GALLERY */
 .gallery{
 display:flex;
 flex-wrap:wrap;
@@ -199,11 +218,12 @@ object-fit:cover;
 border-radius:10px;
 }
 
+/* COUNTER */
 .counters{
 display:flex;
 justify-content:center;
-gap:40px;
 flex-wrap:wrap;
+gap:40px;
 text-align:center;
 }
 
@@ -219,6 +239,7 @@ width:180px;
 font-size:32px;
 }
 
+/* MOBILE */
 @media(max-width:700px){
 .about-container{
 flex-direction:column;
@@ -255,27 +276,29 @@ width:45%;
 </ul>
 </nav>
 
+<!-- HERO -->
 <section class="hero" id="hero">
 <h2>Educating Every Child</h2>
-<p>Supporting underprivileged children with free education</p>
+<p>Supporting underprivileged children with free education and resources</p>
 <a href="#contact" class="donate-btn">Donate Now</a>
 </section>
 
+<!-- ABOUT -->
 <section id="about">
 <h2>About PREM EDUCATION</h2>
 
 <div class="about-container">
 
-<img src="sadhu.jpg" class="founder-img">
+<img src="sadhu.jpg" alt="Sadhu Maharaj" class="founder-img">
 
-<div>
+<div class="about-text">
 
 <p>
-PREM EDUCATION is a social initiative started to support poor children with free education.
+PREM EDUCATION is a social initiative started to support poor and underprivileged children by providing them with free education. The aim of this program is to ensure that no child is deprived of learning because of financial difficulties.
 </p>
 
 <p>
-Each child also receives ₹500 every month for books and study material.
+Each child also receives ₹500 every month to help buy books, notebooks, and learning resources.
 </p>
 
 <p><strong>Founder:</strong> Sadhu Maharaj</p>
@@ -284,9 +307,9 @@ Each child also receives ₹500 every month for books and study material.
 </div>
 
 </div>
-
 </section>
 
+<!-- COUNTER -->
 <section id="counter">
 
 <div class="counters">
@@ -310,6 +333,7 @@ Each child also receives ₹500 every month for books and study material.
 
 </section>
 
+<!-- COURSES -->
 <section id="courses">
 
 <h2>Our Courses</h2>
@@ -318,23 +342,24 @@ Each child also receives ₹500 every month for books and study material.
 
 <div class="card">
 <h3>Computer Class</h3>
-<p>Learn computer skills and programming.</p>
+<p>Learn basic to advanced computer skills including MS Office, programming, and digital literacy.</p>
 </div>
 
 <div class="card">
 <h3>English Class</h3>
-<p>Improve spoken and written English.</p>
+<p>Improve your spoken and written English through interactive learning and practice.</p>
 </div>
 
 <div class="card">
 <h3>Yoga Class</h3>
-<p>Practice yoga for healthy life.</p>
+<p>Practice yoga for physical fitness, mental peace, and overall wellness.</p>
 </div>
 
 </div>
 
 </section>
 
+<!-- YOUTUBE -->
 <section id="youtube">
 
 <h2>Watch Our YouTube Videos</h2>
@@ -343,6 +368,7 @@ Each child also receives ₹500 every month for books and study material.
 
 </section>
 
+<!-- GALLERY -->
 <section id="gallery">
 
 <h2>Our Gallery</h2>
@@ -358,6 +384,7 @@ Each child also receives ₹500 every month for books and study material.
 
 </section>
 
+<!-- CONTACT -->
 <section id="contact">
 
 <h2>Contact Us</h2>
@@ -378,44 +405,33 @@ Each child also receives ₹500 every month for books and study material.
 
 </form>
 
-<p style="text-align:center;margin-top:10px">
-Email: rishantbhaumik@gmail.com
+<p style="margin-top:15px;text-align:center;">
+Or email us directly at:
+<a href="mailto:rishantbhaumik@gmail.com">rishantbhaumik@gmail.com</a>
 </p>
 
 </section>
 
 <footer>
-
-© 2026 PREM EDUCATION  
+© 2026 PREM EDUCATION | All Rights Reserved  
 <br>
-Founder: Sadhu Maharaj  
-<br>
-Creator: Rishant
-
+<strong>Founder:</strong> Sadhu Maharaj  
+<strong>Creator:</strong> Webpage is created by Rishant
 </footer>
 
 <script>
-
 function animateCounter(id,target){
-
 let count=0;
-
 let interval=setInterval(()=>{
-
 count++;
-
 document.getElementById(id).innerText=count;
-
 if(count>=target) clearInterval(interval);
-
 },50);
-
 }
 
 animateCounter("students",250);
 animateCounter("courses-count",3);
 animateCounter("volunteers",4);
-
 </script>
 
 </body>
