@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Prem Education Videos</title>
+
+<link rel="icon" href="logo.jpg">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#f1f1f1;
+}
+
+header{
+background:#2e7d32;
+color:white;
+padding:18px;
+text-align:center;
+font-size:28px;
+font-weight:bold;
+}
+
+/* VIDEO GRID */
+
+.video-container{
+max-width:1200px;
+margin:auto;
+padding:40px 20px;
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:25px;
+}
+
+/* VIDEO CARD */
+
+.video-card{
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+cursor:pointer;
+transition:0.3s;
+}
+
+.video-card:hover{
+transform:scale(1.05);
+}
+
+/* THUMBNAIL */
+
+.thumb-box{
+position:relative;
+width:100%;
+aspect-ratio:16/9;
+overflow:hidden;
+}
+
+.thumb-box img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+/* DURATION */
+
+.duration{
+position:absolute;
+bottom:8px;
+right:8px;
+background:rgba(0,0,0,0.8);
+color:white;
+font-size:12px;
+padding:3px 6px;
+border-radius:4px;
+}
+
+/* TITLE */
+
+.video-title{
+padding:10px 12px;
+font-size:16px;
+font-weight:bold;
+}
+
+/* VIEWS */
+
+.views{
+padding:0 12px 12px;
+color:#666;
+font-size:14px;
+}
+
+/* PLAYER */
+
+#player{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+#player video{
+width:80%;
+max-width:900px;
+aspect-ratio:16/9;
+}
+
+/* CLOSE */
+
+.close-btn{
+position:absolute;
+top:20px;
+right:30px;
+font-size:30px;
+color:white;
+cursor:pointer;
+}
+
+/* FOOTER */
+
+footer{
+margin-top:50px;
+background:#333;
+color:white;
+text-align:center;
+padding:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+PREM EDUCATION VIDEOS
+</header>
+
+<div class="video-container">
+
+<!-- VIDEO 1 -->
+
+<div class="video-card" onclick="playVideo('video.mp4','v1')">
+
+<div class="thumb-box">
+<img src="thumb1.png">
+<div class="duration">2:15</div>
+</div>
+
+<div class="video-title">
+Prem Education Intro
+</div>
+
+<div class="views" id="views-v1">0 views</div>
+
+</div>
+
+<!-- VIDEO 2 -->
+
+<div class="video-card" onclick="playVideo('video1.mp4','v2')">
+
+<div class="thumb-box">
+<img src="thumb2.png">
+<div class="duration">1:40</div>
+</div>
+
+<div class="video-title">
+Prem Education Animation Video
+</div>
+
+<div class="views" id="views-v2">0 views</div>
+
+</div>
+
+</div>
+
+<!-- PLAYER -->
+
+<div id="player">
+
+<span class="close-btn" onclick="closeVideo()">✖</span>
+
+<video id="mainVideo" controls autoplay>
+
+<source id="videoSource">
+
+</video>
+
+</div>
+
+<footer>
+
+© 2026 Prem Education  
+Empowering Children Through Education
+
+</footer>
+
+<script>
+
+/* LOAD VIEWS */
+
+function loadViews(){
+
+let v1=localStorage.getItem("v1") || 0;
+let v2=localStorage.getItem("v2") || 0;
+
+document.getElementById("views-v1").innerText=v1+" views";
+document.getElementById("views-v2").innerText=v2+" views";
+
+}
+
+loadViews();
+
+/* PLAY VIDEO */
+
+function playVideo(src,id){
+
+document.getElementById("player").style.display="flex";
+
+document.getElementById("videoSource").src=src;
+
+document.getElementById("mainVideo").load();
+
+/* INCREASE VIEWS */
+
+let count=localStorage.getItem(id) || 0;
+
+count++;
+
+localStorage.setItem(id,count);
+
+loadViews();
+
+}
+
+/* CLOSE */
+
+function closeVideo(){
+
+document.getElementById("player").style.display="none";
+
+document.getElementById("mainVideo").pause();
+
+}
+
+</script>
+
+</body>
+</html>
