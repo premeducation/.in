@@ -4,8 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PREM EDUCATION</title>
-  
+
 <link rel="icon" type="image/png" href="logo.jpg">
+
 <style>
 *{
   margin:0;
@@ -157,6 +158,28 @@ section h2{
   height:140px;
   object-fit:cover;
   border-radius:10px;
+  cursor:pointer;
+}
+
+/* IMAGE ZOOM VIEWER */
+
+#imageViewer{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+#imageViewer img{
+max-width:90%;
+max-height:90%;
+border-radius:10px;
 }
 
 form{
@@ -205,7 +228,6 @@ footer{
 <li><a href="#gallery">Gallery</a></li>
 <li><a href="#contact">Contact</a></li>
 <li><a href="letter.html">Our App</a></li>
-
 
 <li><a href="https://www.youtube.com/@BeautyOfRealLove" target="_blank">Visit Channel</a></li>
 
@@ -279,9 +301,8 @@ Each child also receives ₹500 every month to help buy books, notebooks, and le
 <img src="ram8.jpg" onclick="openImage(this)">
 <img src="ram9.jpg" onclick="openImage(this)">
 <img src="ram10.jpg" onclick="openImage(this)">
-  
 </div>
-  
+
 <div id="imageViewer" onclick="closeImage()">
 <img id="fullImage">
 </div>
@@ -304,7 +325,7 @@ Each child also receives ₹500 every month to help buy books, notebooks, and le
 
 </form>
 
-  <p style="margin-top:15px;text-align:center;">
+<p style="margin-top:15px;text-align:center;">
 Or email us directly at:
 <a href="mailto:rishantbhaumik@gmail.com">rishantbhaumik@gmail.com</a>
 </p>
@@ -321,13 +342,18 @@ Creator: Rishant
 
 </footer>
 
+<script>
+
+function openImage(img){
+document.getElementById("imageViewer").style.display="flex";
+document.getElementById("fullImage").src=img.src;
+}
+
+function closeImage(){
+document.getElementById("imageViewer").style.display="none";
+}
+
+</script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
