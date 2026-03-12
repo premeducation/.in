@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -60,23 +59,37 @@ nav ul li a:hover{
   border-radius:5px;
 }
 
-.login-btn{
-background:white;
-color:black;
-border:none;
-padding:8px 16px;
-border-radius:6px;
-font-size:14px;
-cursor:pointer;
-font-weight:bold;
-}
+/* LOGIN AREA RIGHT SIDE */
 
-.login-btn:hover{
-background:#eee;
-}
-
-.login-item{
+.login-area{
 margin-left:auto;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.login-btn{
+padding:8px 15px;
+background:#4CAF50;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.logout-btn{
+padding:6px 10px;
+border:none;
+background:red;
+color:white;
+border-radius:5px;
+cursor:pointer;
+}
+
+.user-photo{
+width:35px;
+height:35px;
+border-radius:50%;
 }
 
 .hero{
@@ -226,7 +239,6 @@ footer{
   margin-top:40px;
 }
 </style>
-
 </head>
 
 <body>
@@ -237,6 +249,7 @@ footer{
 
 <nav>
 <ul>
+
 <li><a href="#hero">Home</a></li>
 <li><a href="#about">About</a></li>
 <li><a href="#courses">Courses</a></li>
@@ -248,8 +261,17 @@ footer{
 
 <li><a href="https://www.instagram.com/premprasad.vrindavan" target="_blank">Instagram</a></li>
 
-<li class="login-item">
-<button class="login-btn" onclick="googleLogin()">Login / Register</button>
+<li class="login-area">
+
+<div id="loginLi">
+<button class="login-btn" onclick="loginUser()">Login / Register</button>
+</div>
+
+<div id="userArea" style="display:none;">
+<img id="userPhoto" class="user-photo">
+<button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
 </li>
 
 </ul>
@@ -335,7 +357,9 @@ Each child also receives ₹500 every month to help buy books, notebooks, and le
 <form action="https://formsubmit.co/rishantbhaumik@gmail.com" method="POST">
 
 <input type="text" name="name" placeholder="Your Name" required>
+
 <input type="email" name="email" placeholder="Your Email" required>
+
 <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
 
 <button type="submit">Send Message</button>
@@ -351,13 +375,16 @@ Or email us directly at:
 
 <footer>
 
-© 2026 PREM EDUCATION <br>
-Founder: Sadhu Maharaj <br>
+© 2026 PREM EDUCATION  
+<br>
+Founder: Sadhu Maharaj  
+<br>
 Creator: Rishant
 
 </footer>
 
 <script>
+
 function openImage(img){
 document.getElementById("imageViewer").style.display="flex";
 document.getElementById("fullImage").src=img.src;
@@ -366,12 +393,13 @@ document.getElementById("fullImage").src=img.src;
 function closeImage(){
 document.getElementById("imageViewer").style.display="none";
 }
+
 </script>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyB24Gxxkph7TVwmOpBJHBplWgSqwwyrvfE",
@@ -383,18 +411,33 @@ appId: "1:25241355400:web:872747631f965b26060b3d"
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const auth = getAuth();
 const provider = new GoogleAuthProvider();
 
-window.googleLogin = function(){
-signInWithPopup(auth, provider)
-.then((result)=>{
-alert("Welcome " + result.user.displayName);
-})
-.catch((error)=>{
-alert(error.message);
-});
+window.loginUser = function(){
+signInWithPopup(auth,provider);
 }
+
+window.logout = function(){
+signOut(auth);
+}
+
+onAuthStateChanged(auth,(user)=>{
+
+if(user){
+
+document.getElementById("loginLi").style.display="none";
+document.getElementById("userArea").style.display="flex";
+document.getElementById("userPhoto").src=user.photoURL;
+
+}else{
+
+document.getElementById("loginLi").style.display="block";
+document.getElementById("userArea").style.display="none";
+
+}
+
+});
 
 </script>
 
