@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -15,14 +16,12 @@
   font-family:Arial,sans-serif;
 }
 
-/* BACKGROUND */
 body{
   background:url("back.jpg") no-repeat center center/cover;
   background-attachment:fixed;
   color:#333;
 }
 
-/* HEADER */
 header{
   background:rgba(76,175,80,0.9);
   color:white;
@@ -34,7 +33,6 @@ header h1{
   font-size:40px;
 }
 
-/* NAVIGATION */
 nav{
   background:rgba(51,51,51,0.9);
 }
@@ -62,7 +60,25 @@ nav ul li a:hover{
   border-radius:5px;
 }
 
-/* HERO SECTION */
+.login-btn{
+background:white;
+color:black;
+border:none;
+padding:8px 16px;
+border-radius:6px;
+font-size:14px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.login-btn:hover{
+background:#eee;
+}
+
+.login-item{
+margin-left:auto;
+}
+
 .hero{
   display:flex;
   flex-direction:column;
@@ -161,8 +177,6 @@ section h2{
   cursor:pointer;
 }
 
-/* IMAGE ZOOM VIEWER */
-
 #imageViewer{
 display:none;
 position:fixed;
@@ -212,6 +226,7 @@ footer{
   margin-top:40px;
 }
 </style>
+
 </head>
 
 <body>
@@ -232,6 +247,10 @@ footer{
 <li><a href="https://www.youtube.com/@BeautyOfRealLove" target="_blank">Visit Channel</a></li>
 
 <li><a href="https://www.instagram.com/premprasad.vrindavan" target="_blank">Instagram</a></li>
+
+<li class="login-item">
+<button class="login-btn" onclick="googleLogin()">Login / Register</button>
+</li>
 
 </ul>
 </nav>
@@ -316,9 +335,7 @@ Each child also receives ₹500 every month to help buy books, notebooks, and le
 <form action="https://formsubmit.co/rishantbhaumik@gmail.com" method="POST">
 
 <input type="text" name="name" placeholder="Your Name" required>
-
 <input type="email" name="email" placeholder="Your Email" required>
-
 <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
 
 <button type="submit">Send Message</button>
@@ -334,16 +351,13 @@ Or email us directly at:
 
 <footer>
 
-© 2026 PREM EDUCATION  
-<br>
-Founder: Sadhu Maharaj  
-<br>
+© 2026 PREM EDUCATION <br>
+Founder: Sadhu Maharaj <br>
 Creator: Rishant
 
 </footer>
 
 <script>
-
 function openImage(img){
 document.getElementById("imageViewer").style.display="flex";
 document.getElementById("fullImage").src=img.src;
@@ -351,6 +365,35 @@ document.getElementById("fullImage").src=img.src;
 
 function closeImage(){
 document.getElementById("imageViewer").style.display="none";
+}
+</script>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyB24Gxxkph7TVwmOpBJHBplWgSqwwyrvfE",
+authDomain: "prem-education-f3aa0.firebaseapp.com",
+projectId: "prem-education-f3aa0",
+storageBucket: "prem-education-f3aa0.firebasestorage.app",
+messagingSenderId: "25241355400",
+appId: "1:25241355400:web:872747631f965b26060b3d"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+window.googleLogin = function(){
+signInWithPopup(auth, provider)
+.then((result)=>{
+alert("Welcome " + result.user.displayName);
+})
+.catch((error)=>{
+alert(error.message);
+});
 }
 
 </script>
