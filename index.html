@@ -258,7 +258,6 @@ margin-top:40px;
 <li><a href="video.html">Our Video</a></li>
 
 <li><a href="https://www.youtube.com/@BeautyOfRealLove" target="_blank">Visit Channel</a></li>
-
 <li><a href="https://www.instagram.com/premprasad.vrindavan" target="_blank">Instagram</a></li>
 
 <li class="login-area">
@@ -283,14 +282,68 @@ margin-top:40px;
 <a href="#contact" class="donate-btn">Donate Now</a>
 </section>
 
+<section id="about">
+<h2>About PREM EDUCATION</h2>
+<div class="about-container">
+
+<img src="logo.jpg" class="founder-img">
+
+<p>
+PREM EDUCATION is a social initiative started to support poor and underprivileged children by providing them with free education.
+<br><br>
+Each child also receives ₹500 every month for books and learning resources.
+<br><br>
+<strong>Founder:</strong> Sadhu Maharaj<br>
+<strong>Director:</strong> Sadhvi
+</p>
+
+</div>
+</section>
+
+<section id="courses">
+<h2>Our Courses</h2>
+
+<div class="cards">
+
+<div class="card">
+<h3>Computer Class</h3>
+<p>Learn computer basics and programming.</p>
+</div>
+
+<div class="card">
+<h3>English Class</h3>
+<p>Improve spoken and written English.</p>
+</div>
+
+<div class="card">
+<h3>Yoga Class</h3>
+<p>Practice yoga for healthy life.</p>
+</div>
+
+</div>
+</section>
+
 <section id="gallery">
 <h2>Our Gallery</h2>
 
 <div class="gallery">
+
 <img src="mandir.jpg" onclick="openImage(this)">
 <img src="mandir1.jpg" onclick="openImage(this)">
 <img src="mandir2.jpg" onclick="openImage(this)">
 <img src="mandir3.jpg" onclick="openImage(this)">
+<img src="ram.jpg" onclick="openImage(this)">
+<img src="ram1.jpg" onclick="openImage(this)">
+<img src="ram2.jpg" onclick="openImage(this)">
+<img src="ram3.jpg" onclick="openImage(this)">
+<img src="ram4.jpg" onclick="openImage(this)">
+<img src="ram5.jpg" onclick="openImage(this)">
+<img src="ram6.jpg" onclick="openImage(this)">
+<img src="ram7.jpg" onclick="openImage(this)">
+<img src="ram8.jpg" onclick="openImage(this)">
+<img src="ram9.jpg" onclick="openImage(this)">
+<img src="ram10.jpg" onclick="openImage(this)">
+
 </div>
 
 <div id="imageViewer" onclick="closeImage()">
@@ -299,12 +352,31 @@ margin-top:40px;
 
 </section>
 
+<section id="contact">
+
+<h2>Contact Us</h2>
+
+<form action="https://formsubmit.co/rishantbhaumik@gmail.com" method="POST">
+
+<input type="text" name="name" placeholder="Your Name" required>
+<input type="email" name="email" placeholder="Your Email" required>
+
+<textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+
+<button type="submit">Send Message</button>
+
+</form>
+
+</section>
+
 <footer>
+
 © 2026 PREM EDUCATION  
 <br>
 Founder: Sadhu Maharaj  
 <br>
 Creator: Rishant
+
 </footer>
 
 <script>
@@ -339,15 +411,9 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 window.googleLogin = function(){
-
 signInWithPopup(auth, provider)
-.then(()=>{
-alert("Login Successful");
-})
-.catch((error)=>{
-console.log(error);
-});
-
+.then(()=>{ alert("Login Successful"); })
+.catch((error)=>{ console.log(error); });
 }
 
 window.logout = function(){
@@ -355,20 +421,14 @@ signOut(auth);
 }
 
 onAuthStateChanged(auth,(user)=>{
-
 if(user){
-
 document.getElementById("loginLi").style.display="none";
 document.getElementById("userArea").style.display="flex";
 document.getElementById("userPhoto").src=user.photoURL;
-
 }else{
-
 document.getElementById("loginLi").style.display="block";
 document.getElementById("userArea").style.display="none";
-
 }
-
 });
 
 </script>
