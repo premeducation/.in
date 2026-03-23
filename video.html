@@ -118,6 +118,28 @@ max-width:900px;
 aspect-ratio:16/9;
 }
 
+.back-btn{
+position:fixed;
+top:20px;
+left:20px;
+background:var(--gold);
+color:black;
+padding:10px 18px;
+border:none;
+border-radius:30px;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 0 10px rgba(212,175,55,0.5);
+transition:0.3s;
+text-decoration:none;
+z-index:9999;
+}
+
+.back-btn:hover{
+transform:scale(1.08);
+}
+
+
 /* CLOSE */
 
 .close-btn{
@@ -148,6 +170,8 @@ margin-top:40px;
 <header>
 PREM EDUCATION VIDEOS
 </header>
+  
+<a href="index.html" class="back-btn">⬅ Back to Website</a>
 
 <div class="video-container">
 
