@@ -11,23 +11,18 @@
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, #667eea, #764ba2);
       margin:0;
-      padding:0;
       text-align:center;
     }
 
-    h1{
-      color:white;
-      margin:20px;
-    }
+    h1{ color:white; margin:20px; }
 
     .container{
       background:white;
       width:95%;
       max-width:1000px;
       margin:auto;
-      padding:25px;
+      padding:20px;
       border-radius:15px;
-      box-shadow:0 10px 25px rgba(0,0,0,0.2);
       display:none;
     }
 
@@ -39,69 +34,48 @@
       border-radius:10px;
     }
 
-    input{
-      padding:10px;
-      margin:5px;
-      border-radius:8px;
-      border:1px solid #ccc;
-    }
+    input{ padding:10px; margin:5px; border-radius:8px; }
 
     button{
-      padding:10px;
+      padding:8px 12px;
       border:none;
       border-radius:8px;
-      cursor:pointer;
       margin:5px;
+      cursor:pointer;
     }
 
-    .addBtn{ background:#28a745; color:white; }
-    .present{ background:#28a745; color:white; }
-    .absent{ background:#dc3545; color:white; }
-    .delete{ background:#ff9800; color:white; }
-    .send{ background:#007bff; color:white; width:100%; }
+    .addBtn{background:#28a745;color:white;}
+    .present{background:#28a745;color:white;}
+    .absent{background:#dc3545;color:white;}
+    .delete{background:#ff9800;color:white;}
+    .send{background:#007bff;color:white;width:100%;}
 
-    table{
-      width:100%;
-      margin-top:20px;
-      border-collapse: collapse;
-    }
-
-    th{
-      background:#007bff;
-      color:white;
-      padding:10px;
-    }
-
-    td{
-      padding:10px;
-      border-bottom:1px solid #ddd;
-    }
+    table{width:100%; margin-top:20px; border-collapse:collapse;}
+    th{background:#007bff;color:white;padding:10px;}
+    td{padding:10px;border-bottom:1px solid #ddd;}
 
     img{
-      width:60px;
-      height:60px;
-      border-radius:50%;
+      width:60px;height:60px;border-radius:50%;
       object-fit:cover;
     }
   </style>
 </head>
 <body>
 
-<!-- 🔐 LOGIN SCREEN -->
+<!-- 🔐 LOGIN -->
 <div class="loginBox" id="loginBox">
-  <h2>Enter Password</h2>
-  <input type="password" id="pass" placeholder="Password"><br>
+  <h2>Password</h2>
+  <input type="password" id="pass">
   <button onclick="checkPass()">Login</button>
 </div>
 
-<!-- 📘 MAIN APP -->
 <h1 id="title" style="display:none;">📘 Prem Education Attendance</h1>
 
 <div class="container" id="app">
 
   <input id="name" placeholder="Student Name">
-  <input type="file" id="photo" accept="image/*"><br>
-  <button class="addBtn" onclick="addStudent()">➕ Add Student</button>
+  <input type="file" id="photo"><br>
+  <button class="addBtn" onclick="addStudent()">Add Student</button>
 
   <table>
     <thead>
@@ -115,106 +89,128 @@
     <tbody id="data"></tbody>
   </table>
 
-  <button class="send" onclick="sendEmail()">📩 Send to Gmail</button>
+  <button class="send" onclick="sendEmail()">Send to Gmail</button>
 
 </div>
 
-<script>
+<!-- 🔥 FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
-// 🔐 PASSWORD CHECK
-function checkPass(){
-  let p = document.getElementById("pass").value.trim();
+const firebaseConfig = {
+  apiKey: "AIzaSyClp4QXNcw2UWHBhuNZGH1_EwWILKChUvQ",
+  authDomain: "prem-attendance-123.firebaseapp.com",
+  projectId: "prem-attendance-123",
+  storageBucket: "prem-attendance-123.firebasestorage.app",
+  messagingSenderId: "712918044193",
+  appId: "1:712918044193:web:7cea3e9ae897f4efd65d60"
+};
 
-  if(p === "RADHA"){
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("app").style.display = "block";
-    document.getElementById("title").style.display = "block";
-  } else {
-    alert("Wrong Password");
-  }
-}
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-// 📊 DATA SYSTEM
-let students = JSON.parse(localStorage.getItem("students")) || [];
+const colRef = collection(db, "students");
 
-function addStudent(){
+// 🔐 PASSWORD
+window.checkPass = function(){
+  let p = document.getElementById("pass").value;
+  if(p==="RADHA"){
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("app").style.display="block";
+    document.getElementById("title").style.display="block";
+    show();
+  } else alert("Wrong Password");
+};
+
+// ➕ ADD
+window.addStudent = async function(){
   let name = document.getElementById("name").value.trim();
   let file = document.getElementById("photo").files[0];
 
-  if(name=="") return alert("Enter student name");
+  if(!name) return alert("Enter name");
+
+  let photo = "";
 
   if(file){
-    let reader = new FileReader();
-    reader.onload = function(e){
-      saveStudent(name, e.target.result);
-    }
+    const reader = new FileReader();
+    reader.onload = async function(e){
+      await addDoc(colRef, {
+        name,
+        photo:e.target.result,
+        status:"Not Marked"
+      });
+      show();
+    };
     reader.readAsDataURL(file);
   } else {
-    saveStudent(name, "");
-  }
-}
-
-function saveStudent(name, photo){
-  students.push({name, photo, status:"Not Marked"});
-  localStorage.setItem("students", JSON.stringify(students));
-
-  document.getElementById("name").value="";
-  document.getElementById("photo").value="";
-  show();
-}
-
-function setStatus(i, status){
-  students[i].status = status;
-  localStorage.setItem("students", JSON.stringify(students));
-  show();
-}
-
-function deleteStudent(i){
-  if(confirm("Delete this student?")){
-    students.splice(i,1);
-    localStorage.setItem("students", JSON.stringify(students));
+    await addDoc(colRef, {name, photo:"", status:"Not Marked"});
     show();
   }
-}
+};
 
-function show(){
+// 📊 SHOW
+async function show(){
   let data = document.getElementById("data");
   data.innerHTML="";
 
-  students.forEach((s,i)=>{
-    let photo = s.photo || "https://via.placeholder.com/60";
+  const snapshot = await getDocs(colRef);
+
+  snapshot.forEach(docSnap=>{
+    let s = docSnap.data();
+    let id = docSnap.id;
 
     data.innerHTML += `
       <tr>
-        <td><img src="${photo}"></td>
+        <td><img src="${s.photo || 'https://via.placeholder.com/60'}"></td>
         <td>${s.name}</td>
         <td>${s.status}</td>
         <td>
-          <button class="present" onclick="setStatus(${i}, 'Present')">✔</button>
-          <button class="absent" onclick="setStatus(${i}, 'Absent')">❌</button>
-          <button class="delete" onclick="deleteStudent(${i})">🗑</button>
+          <button onclick="updateStatus('${id}','Present')">✔</button>
+          <button onclick="updateStatus('${id}','Absent')">❌</button>
+          <button onclick="deleteStudent('${id}')">🗑</button>
         </td>
       </tr>
     `;
   });
 }
 
-function sendEmail(){
-  let text = "📘 Prem Education Attendance Report\n\n";
+// ✔ STATUS
+window.updateStatus = async function(id, status){
+  await updateDoc(doc(db,"students",id),{status});
+  show();
+};
 
-  students.forEach(s=>{
-    text += s.name + " - " + s.status + "\\n";
+// ❌ DELETE
+window.deleteStudent = async function(id){
+  await deleteDoc(doc(db,"students",id));
+  show();
+};
+
+// 📩 EMAIL
+window.sendEmail = function(){
+  let text = "Prem Education Attendance\n\n";
+  document.querySelectorAll("#data tr").forEach(row=>{
+    let name = row.children[1].innerText;
+    let status = row.children[2].innerText;
+    text += name+" - "+status+"\n";
   });
 
   let url = "https://mail.google.com/mail/?view=cm&fs=1"
-          + "&to=rishantbhaumik@gmail.com"
-          + "&su=Prem Education Attendance Report"
-          + "&body=" + encodeURIComponent(text);
+    + "&to=rishantbhaumik@gmail.com"
+    + "&su=Attendance"
+    + "&body="+encodeURIComponent(text);
 
-  window.open(url, "_blank");
-}
-
-show();
+  window.open(url);
+};
 
 </script>
 
