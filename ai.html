@@ -214,6 +214,19 @@
             }
         }
 
+        // Math Equation Render karne ke liye helper function
+        function triggerMathRendering() {
+            if (window.renderMathInElement) {
+                renderMathInElement(chatContainer, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError : false
+                });
+            }
+        }
+
         function updateClerkUI() {
             const sidebarCard = document.getElementById('clerk-sidebar-card');
             const headerArea = document.getElementById('clerk-header-area');
@@ -360,6 +373,10 @@
                     const data = await response.json();
                     const aiResponse = data.candidates[0].content.parts[0].text;
                     messageDiv.innerText = aiResponse;
+                    
+                    // Math rendering trigger call kiya AI ke response aate hi
+                    triggerMathRendering();
+
                     chatHistory.push({ role: "model", parts: [{ text: aiResponse }] });
                 } catch (e) { messageDiv.innerText = "Error Connecting Engine."; }
             }
@@ -386,7 +403,15 @@
             allChats.slice(-10).reverse().forEach(item => {
                 const li = document.createElement('li'); li.className = `history-item ${item.id === currentChatId ? 'active-chat' : ''}`;
                 li.innerHTML = `<span>${item.title}</span><button class="delete-history-btn" onclick="event.stopPropagation(); allChats=allChats.filter(c=>c.id!=${item.id}); localStorage.setItem('quick_ai_chats',JSON.stringify(allChats)); startNewChat();">🗑️</button>`;
-                li.onclick = () => { currentChatId = item.id; chatHistory = JSON.parse(JSON.stringify(item.messages)); chatContainer.innerHTML = ''; chatHistory.forEach(msg => appendMessage(msg.parts[0].text, msg.role==='model'?'ai':'user')); closeSidebarOnMobile(); };
+                li.onclick = () => { 
+                    currentChatId = item.id; 
+                    chatHistory = JSON.parse(JSON.stringify(item.messages)); 
+                    chatContainer.innerHTML = ''; 
+                    chatHistory.forEach(msg => appendMessage(msg.parts[0].text, msg.role==='model'?'ai':'user')); 
+                    // History reload hone par bhi equations format ho sakein
+                    triggerMathRendering();
+                    closeSidebarOnMobile(); 
+                };
                 historyList.appendChild(li);
             });
         }
