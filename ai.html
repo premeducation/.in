@@ -180,7 +180,7 @@
         <div class="premium-modal">
             <div class="premium-title">🚀 Upgrade to Pro Pack</div>
             <div class="premium-features">
-                <div>⚡ <b>Prem 2.5 Pro Access:</b> Deep study analysis engine.</div>
+                <div>⚡ <b>DeepSeek Chat Engine:</b> Premium deep study analysis.</div>
                 <div>🖼️ <b>HD Unlimited Images:</b> Fast instant image generation.</div>
                 <div>📂 <b>Unlimited Cloud Sync:</b> Save millions of long study logs.</div>
             </div>
@@ -190,13 +190,12 @@
     </div>
 
     <script>
-        // 🔒 Note: Frontend mein koi API KEY ab nahi hai!
+        // 🔑 DeepSeek Key Automatically Integrated Here
+        const API_KEY = "sk-c01ea67ef3db457398292004283c051d"; 
+        const DEEPSEEK_URL = "https://api.deepseek.com/v1/chat/completions";
+
         let allChats = []; let currentChatId = null; let chatHistory = []; let base64Image = null; let mimeType = null;
         
-        // Agar aap localhost par test kar rahe hain toh yahi chalega. 
-        // Production deploy karte waqt is URL ko apne backend domain se badal dein.
-        const BACKEND_URL = "http://localhost:3000/api/chat"; 
-
         const chatContainer = document.getElementById('chat-container');
         const imgPreviewBox = document.getElementById('img-preview-box');
         const imgPreview = document.getElementById('img-preview');
@@ -294,7 +293,7 @@
                 <div class="welcome-view" id="welcome-view">
                     <img src="logo.jpg" class="welcome-logo-img">
                     <h1 class="welcome-title">How can I help you today?</h1>
-                    <div class="charity-banner">✨ Welcome to Prem Ai for poor students who can't afford books & notes 📚</div>
+                    <div class="charity-banner">✨ Powered by DeepSeek - Free study support engine for students 📚</div>
                     <div class="suggestions-grid">
                         <div class="suggestion-card" onclick="runSuggestion('/image A high-tech science laboratory cartoon 3d render')">
                             <p class="suggestion-text">🎨 Try Image Generator</p><div class="suggestion-icon">🖼️</div>
@@ -360,37 +359,45 @@
                     messageDiv.innerText = "Failed to launch Prem Nova Image engine.";
                 }
             } else {
-                let parts = [];
-                if (text) parts.push({ text: text });
-                if (base64Image) parts.push({ inlineData: { data: base64Image, mimeType: mimeType } });
-
-                chatHistory.push({ role: "user", parts: parts });
+                // Formatting for UI history system
+                chatHistory.push({ role: "user", parts: [{ text: text }] });
                 base64Image = null; 
                 const messageDiv = appendMessage("Thinking...", 'ai').messageDiv;
 
                 try {
-                    // 🔄 Fetching answer through Node.js Backend Server
-                    const response = await fetch(BACKEND_URL, {
+                    // DeepSeek Format conversion logic
+                    const formattedHistory = chatHistory.map(msg => ({
+                        role: msg.role === 'model' ? 'assistant' : 'user',
+                        content: msg.parts[0].text
+                    }));
+
+                    const response = await fetch(DEEPSEEK_URL, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ chatHistory: chatHistory })
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${API_KEY}`
+                        },
+                        body: JSON.stringify({ 
+                            model: "deepseek-chat",
+                            messages: formattedHistory
+                        })
                     });
                     const data = await response.json();
-
+                    
                     if (data.error) {
-                        console.error("Server Side Error:", data.error);
-                        messageDiv.innerText = "Error response from backend engine.";
+                        console.error("DeepSeek Core Error:", data.error);
+                        messageDiv.innerText = `API Error: ${data.error.message}`;
                         return;
                     }
 
-                    const aiResponse = data.candidates[0].content.parts[0].text;
+                    const aiResponse = data.choices[0].message.content;
                     messageDiv.innerText = aiResponse;
                     
                     triggerMathRendering();
                     chatHistory.push({ role: "model", parts: [{ text: aiResponse }] });
                 } catch (e) { 
-                    console.error("Connection Error:", e);
-                    messageDiv.innerText = "Error Connecting to Backend. Check if server is running."; 
+                    console.error("Network Error:", e);
+                    messageDiv.innerText = "Error Connecting to DeepSeek Engine. Please recheck integration setup."; 
                 }
             }
             
