@@ -190,9 +190,13 @@
     </div>
 
     <script>
-        const API_KEY = "AIzaSyAtgtnkyTewQl3RZBQVAW_TTLLbd7EZFAU"; 
+        // 🔒 Note: Frontend mein koi API KEY ab nahi hai!
         let allChats = []; let currentChatId = null; let chatHistory = []; let base64Image = null; let mimeType = null;
         
+        // Agar aap localhost par test kar rahe hain toh yahi chalega. 
+        // Production deploy karte waqt is URL ko apne backend domain se badal dein.
+        const BACKEND_URL = "http://localhost:3000/api/chat"; 
+
         const chatContainer = document.getElementById('chat-container');
         const imgPreviewBox = document.getElementById('img-preview-box');
         const imgPreview = document.getElementById('img-preview');
@@ -214,7 +218,6 @@
             }
         }
 
-        // Math Equation Render karne ke liye helper function
         function triggerMathRendering() {
             if (window.renderMathInElement) {
                 renderMathInElement(chatContainer, {
@@ -362,23 +365,33 @@
                 if (base64Image) parts.push({ inlineData: { data: base64Image, mimeType: mimeType } });
 
                 chatHistory.push({ role: "user", parts: parts });
-                base64Image = null; const messageDiv = appendMessage("Thinking...", 'ai').messageDiv;
+                base64Image = null; 
+                const messageDiv = appendMessage("Thinking...", 'ai').messageDiv;
 
                 try {
-                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
+                    // 🔄 Fetching answer through Node.js Backend Server
+                    const response = await fetch(BACKEND_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ contents: chatHistory })
+                        body: JSON.stringify({ chatHistory: chatHistory })
                     });
                     const data = await response.json();
+
+                    if (data.error) {
+                        console.error("Server Side Error:", data.error);
+                        messageDiv.innerText = "Error response from backend engine.";
+                        return;
+                    }
+
                     const aiResponse = data.candidates[0].content.parts[0].text;
                     messageDiv.innerText = aiResponse;
                     
-                    // Math rendering trigger call kiya AI ke response aate hi
                     triggerMathRendering();
-
                     chatHistory.push({ role: "model", parts: [{ text: aiResponse }] });
-                } catch (e) { messageDiv.innerText = "Error Connecting Engine."; }
+                } catch (e) { 
+                    console.error("Connection Error:", e);
+                    messageDiv.innerText = "Error Connecting to Backend. Check if server is running."; 
+                }
             }
             
             let activeThread = allChats.find(c => c.id === currentChatId);
@@ -408,7 +421,6 @@
                     chatHistory = JSON.parse(JSON.stringify(item.messages)); 
                     chatContainer.innerHTML = ''; 
                     chatHistory.forEach(msg => appendMessage(msg.parts[0].text, msg.role==='model'?'ai':'user')); 
-                    // History reload hone par bhi equations format ho sakein
                     triggerMathRendering();
                     closeSidebarOnMobile(); 
                 };
